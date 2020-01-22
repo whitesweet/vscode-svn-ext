@@ -1,6 +1,6 @@
 # vscode-svn-ext README
 
-This is the README for your extension "vscode-svn-ext". After writing up a brief description, we recommend including the following sections.
+This is the README for extension "vscode-svn-ext".
 
 ## Features
 
