@@ -2,7 +2,8 @@
 	"name": "vscode-svn-ext",
 	"displayName": "vscode-svn-ext",
 	"description": "",
-	"version": "0.0.1",
+    "version": "0.0.1",
+    "publisher": "hupeidong",
 	"engines": {
 		"vscode": "^1.39.0"
 	},
