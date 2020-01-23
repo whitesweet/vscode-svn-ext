@@ -1,11 +1,20 @@
 import { fixPathSeparator, IExecutionResult, IDisposable, toDisposable, parseInfoXml, ISvnInfo, parseSvnList, ISvnListItem } from "./utils";
 import * as cp from "child_process";
 import * as proc from "process";
-import { Readable } from "stream";
+import { Readable, EventEmitter } from "stream";
 import { iconv } from "./vscodeModules";
 
 export class Commands {
     private _svnCmd: string;
+
+    private _onOutput = new EventEmitter();
+    get onOutput(): EventEmitter {
+        return this._onOutput;
+    }
+
+    public logOutput(output: string): void {
+        this._onOutput.emit("log", output);
+    }
 
     constructor(value?: string) {
         this._svnCmd = value ? value : "";
@@ -53,6 +62,11 @@ export class Commands {
         if (cwdPath) {
             defaults.cwd = cwdPath;
         }
+
+        const argsOut = args.map(arg => (/ |^$/.test(arg) ? `'${arg}'` : arg));
+        this.logOutput(
+            `[${cwdPath}]$ svn ${argsOut.join(" ")}`
+        );
 
         const process = cp.spawn(this._svnCmd, args, defaults);
 
