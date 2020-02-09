@@ -1,13 +1,15 @@
 import { Commands } from "./commands";
 import { selectBranch } from "./branch";
-import { window } from "vscode";
+import * as vscode from "vscode";
 
 export class Repository {
     private workspaceRoot: string;
+    private cwdPath: string;
     private commands: Commands;
 
-    constructor(commands: Commands, root: string) {
+    constructor(commands: Commands, cwdPath: string, root: string) {
         this.workspaceRoot = root;
+        this.cwdPath = cwdPath;
         this.commands = commands;
     }
 
@@ -27,7 +29,7 @@ export class Repository {
     public async switchBranch(ref: string, force: boolean = false) {
         const repoUrl = await this.getRepoUrl();
         const branchUrl = repoUrl + "/" + ref;
-        return await this.commands.switchByDir(this.workspaceRoot, branchUrl, force);
+        return await this.commands.switchByDir(this.cwdPath, branchUrl, force);
     }
 
     public async selectBranch() {
@@ -38,7 +40,7 @@ export class Repository {
 
         const result = await this.switchBranch(branch.path);
         if (result.stderr.indexOf("ignore-ancestry") > 0) {
-            const answer = await window.showErrorMessage(
+            const answer = await vscode.window.showErrorMessage(
                 "Seems like these branches don't have a common ancestor. " +
                 " Do you want to retry with '--ignore-ancestry' option?",
                 "Yes",
@@ -46,11 +48,12 @@ export class Repository {
             );
             if (answer === "Yes") {
                 await this.switchBranch(branch.path, true);
+                vscode.commands.executeCommand("extension.branchViews.refresh");
             }
         }
         else if (result.stderr.length > 0) {
-            window.showErrorMessage("Unable to switch branch");
+            vscode.window.showErrorMessage("Unable to switch branch");
         }
-
+        vscode.commands.executeCommand("extension.branchViews.refresh");
     }
 }

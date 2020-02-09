@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import { Commands } from './commands';
 import { Repository } from './repository';
 import { window } from 'vscode';
+import { BranchViewsProvider } from './branchViews';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -14,10 +15,23 @@ export function activate(context: vscode.ExtensionContext) {
     const outputChannel = window.createOutputChannel("vscode-svn-ext");
     outputChannel.show();
     outputChannel.appendLine('"vscode-svn-ext" is now active!');
-    const svnPath = vscode.workspace
+    let svnPath = vscode.workspace
         .getConfiguration()
         .get<string>("vscodeSvnExt.svn.path");
+    const branchViewsDetectLevel = vscode.workspace
+        .getConfiguration()
+        .get<number>("vscodeSvnExt.branchViews.detect.level");
+    const filesExcludes = vscode.workspace
+        .getConfiguration().get<object>("files.exclude");
 
+    if (!svnPath){
+        svnPath = vscode.workspace
+            .getConfiguration()
+            .get<string>("svn.path");
+        if (!svnPath) {
+            vscode.window.showErrorMessage("vscodeSvnExt.svn.path not found!");
+        }
+    }
     let commands = new Commands(svnPath);
     const onOutput = (str: string) => outputChannel.appendLine(str);
     commands.onOutput.addListener("log", onOutput);
@@ -53,11 +67,15 @@ export function activate(context: vscode.ExtensionContext) {
         // ).catch((err: any) => console.error(err));
         commands.getInfo(uri.path).then(
             (info) => {
-                const repository = new Repository(commands, info.wcInfo?.wcrootAbspath ? info.wcInfo?.wcrootAbspath : "");
+                const repository = new Repository(commands, uri.path, info.wcInfo?.wcrootAbspath ? info.wcInfo?.wcrootAbspath : "");
                 repository.selectBranch();
             }
         ).catch((err: any) => console.error(err));
     });
+
+    const branchViewsProvider = new BranchViewsProvider(vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders : [], branchViewsDetectLevel ? branchViewsDetectLevel : -1, filesExcludes ? filesExcludes : {}, commands);
+    vscode.window.registerTreeDataProvider('branchViews', branchViewsProvider);
+    vscode.commands.registerCommand('extension.branchViews.refresh', () => branchViewsProvider.refresh());
 
     context.subscriptions.push(disposable);
 }

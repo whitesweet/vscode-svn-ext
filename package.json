@@ -1,79 +1,103 @@
 {
-	"name": "vscode-svn-ext",
-	"displayName": "vscode-svn-ext",
-	"description": "",
+    "name": "vscode-svn-ext",
+    "displayName": "vscode-svn-ext",
+    "description": "",
     "version": "0.0.1",
     "publisher": "hupeidong",
     "repository": {
         "type": "git",
         "url": "https://github.com/whitesweet/vscode-svn-ext.git"
     },
-	"engines": {
-		"vscode": "^1.39.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:extension.switchBranch"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.switchBranch",
-				"title": "switch branch"
-			}
-		],
-		"menus": {
-			"editor/context": [
-				{
-					"when": "editorFocus",
-					"command": "extension.switchBranch",
-					"group": "9_svnext"
-				}
-			],
-			"explorer/context": [
-				{
-					"command": "extension.switchBranch",
-					"group": "9_svn"
-				}
-			]
-		},
-		"configuration": {
-			"type": "object",
-			"title": "vscode-svn-ext",
-			"properties": {
-				"vscodeSvnExt.svn.path": {
-					"type": "string",
-					"default": "",
-					"description": "svn.path"
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.11.7",
+    "engines": {
+        "vscode": "^1.39.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onView:branchViews",
+        "onCommand:extension.switchBranch"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "views": {
+            "explorer": [
+                {
+                    "id": "branchViews",
+                    "name": "Branch Views"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "extension.switchBranch",
+                "title": "switch branch"
+            },
+            {
+                "command": "extension.branchViews.refresh",
+                "title": "refresh"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "editorFocus",
+                    "command": "extension.switchBranch",
+                    "group": "9_svnext"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "extension.switchBranch",
+                    "group": "9_svn"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "extension.branchViews.refresh",
+                    "when": "view == branchViews"
+                }
+            ]
+        },
+        "configuration": {
+            "type": "object",
+            "title": "vscode-svn-ext",
+            "properties": {
+                "vscodeSvnExt.svn.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "svn.path"
+                },
+                "vscodeSvnExt.branchViews.detect.level": {
+                    "type": "number",
+                    "default": "-1"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^5.2.7",
+        "@types/node": "^12.12.26",
         "@types/vscode": "^1.39.0",
         "@types/xml2js": "^0.4.5",
-		"glob": "^7.1.5",
-		"mocha": "^6.2.2",
-		"typescript": "^3.6.4",
-		"tslint": "^5.20.0",
-		"vscode-test": "^1.2.2"
-	},
-	"dependencies": {
-		"xml2js": "^0.4.5",
-		"child_process": "^1.0.2",
-		"jschardet": "^2.1.1"
-	}
+        "glob": "^7.1.5",
+        "mocha": "^6.2.2",
+        "tslint": "^5.20.1",
+        "typescript": "^3.6.4",
+        "vscode-test": "^1.2.2"
+    },
+    "dependencies": {
+        "child_process": "^1.0.2",
+        "jschardet": "^2.1.1",
+        "minimatch": "^3.0.4",
+        "xml2js": "^0.4.5"
+    }
 }

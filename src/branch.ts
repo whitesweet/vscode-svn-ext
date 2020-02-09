@@ -1,4 +1,4 @@
-import { ProgressLocation, window } from "vscode";
+import * as vscode from "vscode";
 import ParentFolderItem from "./quickPickItems/parentFolderItem";
 import FolderItem from "./quickPickItems/folderItem";
 import { IBranchItem, SvnKindType } from "./utils";
@@ -9,10 +9,11 @@ export async function selectBranch(
     allowNew = false,
     folder?: string
 ): Promise<IBranchItem | undefined> {
+
     const promise = repository.list(folder);
 
-    window.withProgress(
-        { location: ProgressLocation.Window, title: "Checking remote branches" },
+    vscode.window.withProgress(
+        { location: vscode.ProgressLocation.Window, title: "Checking remote branches" },
         () => promise
     );
 
@@ -31,7 +32,7 @@ export async function selectBranch(
         picks.push(new FolderItem(dirs[i], true, folder));
     }
 
-    const choice = await window.showQuickPick(picks);
+    const choice = await vscode.window.showQuickPick(picks);
     if (!choice) {
         return;
     }
@@ -46,4 +47,25 @@ export async function selectBranch(
     }
 
     return;
+}
+
+
+export class BranchViewItem extends vscode.TreeItem {
+
+    constructor(
+        public readonly label: string,
+        public readonly branch: string,
+        public readonly uri: vscode.Uri,
+        public readonly level: number,
+        public readonly collapsibleState: vscode.TreeItemCollapsibleState
+    ) {
+        super(label, collapsibleState);
+    }
+
+    get description(): string {
+        if(this.branch){
+            return this.branch;
+        }
+        return "";
+    }
 }

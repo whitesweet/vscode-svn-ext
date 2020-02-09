@@ -12,6 +12,9 @@ export default class FolderItem implements QuickPickItem {
     }
 
     get description(): string {
+        if (!this.isbranch) {
+            return "";
+        }
         return `r${this.dir.commit.revision} | ${
             this.dir.commit.author
             } | ${new Date(this.dir.commit.date).toLocaleString()}`;
