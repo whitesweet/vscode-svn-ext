@@ -28,7 +28,7 @@
         },
         "commands": [{
                 "command": "extension.switchBranch",
-                "title": "switch branch"
+                "title": "Switch branch"
             },
             {
                 "command": "extension.branchViews.refresh",
