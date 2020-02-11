@@ -17,8 +17,7 @@ export async function selectBranch(
         () => promise
     );
 
-    const list = await promise;
-    const dirs = list.filter((item: { kind: SvnKindType; }) => item.kind === SvnKindType.DIR);
+    const dirs = await promise;
 
     const picks = [];
     if (folder) {
@@ -28,7 +27,9 @@ export async function selectBranch(
         picks.push(new ParentFolderItem(parent));
     }
     for (let i = 0; i < dirs.length; i++) {
-        picks.push(new FolderItem(dirs[i], false, folder));
+        if(dirs[i].kind === SvnKindType.DIR){
+            picks.push(new FolderItem(dirs[i], false, folder));
+        }
         picks.push(new FolderItem(dirs[i], true, folder));
     }
 
@@ -53,13 +54,13 @@ export async function selectBranch(
 export class BranchViewItem extends vscode.TreeItem {
 
     constructor(
-        public readonly label: string,
+        //public readonly label: string,
         public readonly branch: string,
         public readonly uri: vscode.Uri,
         public readonly level: number,
         public readonly collapsibleState: vscode.TreeItemCollapsibleState
     ) {
-        super(label, collapsibleState);
+        super(uri, collapsibleState);
     }
 
     get description(): string {

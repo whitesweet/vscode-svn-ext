@@ -67,7 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
         // ).catch((err: any) => console.error(err));
         commands.getInfo(uri.path).then(
             (info) => {
-                const repository = new Repository(commands, uri.path, info.wcInfo?.wcrootAbspath ? info.wcInfo?.wcrootAbspath : "");
+                const repository = new Repository(commands, uri, info.wcInfo?.wcrootAbspath ? info.wcInfo?.wcrootAbspath : "");
                 repository.selectBranch();
             }
         ).catch((err: any) => console.error(err));

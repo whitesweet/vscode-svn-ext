@@ -21,43 +21,39 @@
     "main": "./out/extension.js",
     "contributes": {
         "views": {
-            "explorer": [
-                {
-                    "id": "branchViews",
-                    "name": "Branch Views"
-                }
-            ]
+            "explorer": [{
+                "id": "branchViews",
+                "name": "Branch Views"
+            }]
         },
-        "commands": [
-            {
+        "commands": [{
                 "command": "extension.switchBranch",
                 "title": "switch branch"
             },
             {
                 "command": "extension.branchViews.refresh",
-                "title": "refresh"
+                "title": "refresh",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
             }
         ],
         "menus": {
-            "editor/context": [
-                {
-                    "when": "editorFocus",
-                    "command": "extension.switchBranch",
-                    "group": "9_svnext"
-                }
-            ],
-            "explorer/context": [
-                {
-                    "command": "extension.switchBranch",
-                    "group": "9_svn"
-                }
-            ],
-            "view/title": [
-                {
-                    "command": "extension.branchViews.refresh",
-                    "when": "view == branchViews"
-                }
-            ]
+            "editor/context": [{
+                "when": "editorFocus",
+                "command": "extension.switchBranch",
+                "group": "9_svnext"
+            }],
+            "explorer/context": [{
+                "command": "extension.switchBranch",
+                "group": "9_svn"
+            }],
+            "view/title": [{
+                "command": "extension.branchViews.refresh",
+                "when": "view == branchViews",
+                "group": "navigation"
+            }]
         },
         "configuration": {
             "type": "object",

@@ -29,6 +29,12 @@ export class Commands {
         return parseSvnList(result.stdout);
     }
 
+    public async switchByFile(cwdPath: string, path: string, pathLocal: string, force: boolean = false) {
+        const args = ["switch", path, pathLocal].concat(force ? ["--ignore-ancestry"] : []);
+        cwdPath = fixPathSeparator(cwdPath);
+        return await this.exec(cwdPath, args);
+    }
+
     public async switchByDir(cwdPath: string, path: string, force: boolean = false) {
         const args = ["switch", path].concat(force ? ["--ignore-ancestry"] : []);
         cwdPath = fixPathSeparator(cwdPath);

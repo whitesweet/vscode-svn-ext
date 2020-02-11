@@ -28,7 +28,7 @@ export class BranchViewsProvider implements vscode.TreeDataProvider<BranchViewIt
                 return Promise.resolve([]);
             }
         } else {
-            return Promise.resolve([new BranchViewItem(this.workspaceFolders[0].name, "", this.workspaceFolders[0].uri, 0, vscode.TreeItemCollapsibleState.Collapsed)]);
+            return Promise.resolve([new BranchViewItem("", this.workspaceFolders[0].uri, 0, vscode.TreeItemCollapsibleState.Collapsed)]);
         }
     }
 
@@ -63,10 +63,10 @@ export class BranchViewsProvider implements vscode.TreeDataProvider<BranchViewIt
                         }
                         let branchname = index < 0 ? "" : cmdResult.url.substr(index);
                         if (value[1] === vscode.FileType.Directory) {
-                            items.push(new BranchViewItem(value[0], branchname, vscode.Uri.file(filepath), element.level + 1, element.level + 1 === this.detectLevel ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed));
+                            items.push(new BranchViewItem(branchname, vscode.Uri.file(filepath), element.level + 1, element.level + 1 === this.detectLevel ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed));
                         }
                         else if (value[1] === vscode.FileType.File) {
-                            items.push(new BranchViewItem(value[0], branchname, vscode.Uri.file(filepath), element.level + 1, vscode.TreeItemCollapsibleState.None));
+                            items.push(new BranchViewItem(branchname, vscode.Uri.file(filepath), element.level + 1, vscode.TreeItemCollapsibleState.None));
                         }
                     }
                 } catch (error) {
