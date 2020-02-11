@@ -4,7 +4,8 @@ This is the README for extension "vscode-svn-ext".
 
 ## Features
 
-add "switch branch" menu
+add "Switch branch" menu
+add "BRANCH VIEWS" view
 
 ## Requirements
 
@@ -13,6 +14,7 @@ add "switch branch" menu
 This extension contributes the following settings:
 
 * `vscode-svn-ext.svn.path`: svn execute file
+* `vscodeSvnExt.branchViews.detect.level`: workspace path scan level
 
 ## Known Issues
 
