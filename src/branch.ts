@@ -3,6 +3,7 @@ import ParentFolderItem from "./quickPickItems/parentFolderItem";
 import FolderItem from "./quickPickItems/folderItem";
 import { IBranchItem, SvnKindType } from "./utils";
 import { Repository } from "./repository";
+import * as path from 'path';
 
 export async function selectBranch(
     repository: Repository,
@@ -58,9 +59,16 @@ export class BranchViewItem extends vscode.TreeItem {
         public readonly branch: string,
         public readonly uri: vscode.Uri,
         public readonly level: number,
-        public readonly collapsibleState: vscode.TreeItemCollapsibleState
+        public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+        public readonly isFile?: boolean
     ) {
         super(uri, collapsibleState);
+        if (!isFile){
+            this.iconPath = {
+                light: path.join(__filename, '..', '..', 'resources', 'folder.svg'),
+                dark: path.join(__filename, '..', '..', 'resources', 'folder.svg')
+            };
+        }
     }
 
     get description(): string {

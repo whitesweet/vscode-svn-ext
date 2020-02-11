@@ -66,7 +66,7 @@ export class BranchViewsProvider implements vscode.TreeDataProvider<BranchViewIt
                             items.push(new BranchViewItem(branchname, vscode.Uri.file(filepath), element.level + 1, element.level + 1 === this.detectLevel ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed));
                         }
                         else if (value[1] === vscode.FileType.File) {
-                            items.push(new BranchViewItem(branchname, vscode.Uri.file(filepath), element.level + 1, vscode.TreeItemCollapsibleState.None));
+                            items.push(new BranchViewItem(branchname, vscode.Uri.file(filepath), element.level + 1, vscode.TreeItemCollapsibleState.None, true));
                         }
                     }
                 } catch (error) {
